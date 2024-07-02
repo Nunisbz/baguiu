@@ -1,37 +1,31 @@
-import React, { useState } from 'react';
-import SearchCEP from './components/SearchCEP';
-import AddressDisplay from './components/AddressDisplay';
+import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import BuscarCEP from './pages/BuscarCEP';
+import BuscarCachorro from './pages/BuscarCachorro';
 import './App.css';
 
 const App = () => {
-  const [cep, setCep] = useState('');
-  const [address, setAddress] = useState(null);
-  const [error, setError] = useState('');
-
-  const fetchAddress = async (cep) => {
-    setError('');
-    setAddress(null);
-
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
-
-      if (data.erro) {
-        setError('CEP não encontrado');
-      } else {
-        setAddress(data);
-      }
-    } catch (error) {
-      setError('Erro ao buscar o endereço');
-    }
-  };
-
   return (
     <div className="app">
-      <h1>Busca de Endereço por CEP</h1>
-      <SearchCEP setCep={setCep} fetchAddress={fetchAddress} />
-      {error && <p className="error">{error}</p>}
-      {address && <AddressDisplay address={address} />}
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/buscar-cep">Buscar CEPs</Link>
+          </li>
+          <li>
+            <Link to="/buscar-cachorro">Buscar Cachorro</Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/buscar-cep" element={<BuscarCEP />} />
+        <Route path="/buscar-cachorro" element={<BuscarCachorro />} />
+      </Routes>
     </div>
   );
 };
